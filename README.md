@@ -302,9 +302,3 @@ into one practical application.
 The project is also an attempt to understand how a larger Python application can be structured instead of working only with small standalone scripts.
 
 ---
-
-# License
-
-No license has currently been specified for this project.
-
-If this project is going to be publicly distributed, a license should be added.
