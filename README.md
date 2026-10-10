@@ -57,6 +57,12 @@ The application uses a PySide6 graphical interface rather than a command-line in
 
 ---
 
+# DevNote:
+
+```
+Idk why this is but while installing [easyocr], the first attempt always gives an error which solves after manually installing [numpy] and [triton] first followed by reinstalling [easyocr]
+```
+
 # Installation
 
 ## 1. Clone or download the project
@@ -66,6 +72,7 @@ Download the project and open a terminal in the project directory.
 Example:
 
 ```bash
+mkdir form-scanner-ocr
 cd form-scanner-ocr
 ```
 
@@ -101,7 +108,7 @@ Then run:
 pip install -r requirements.txt
 ```
 
-This installs the Python packages required by the program.
+This installs the Python packages required by the program.``````````````
 
 The standard-library modules used by the project, such as `json`, `sqlite3`, `pathlib`, `datetime`, and `sys`, do **not** need to be installed separately.
 

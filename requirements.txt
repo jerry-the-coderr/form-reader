@@ -1,5 +1,5 @@
-PySide6
 opencv-python
+PySide6
 numpy
 PyMuPDF
 easyocr
