@@ -1,5 +1,3 @@
-# a scaled down version of the main concept project
-
 import sys
 import json
 import sqlite3
@@ -1308,15 +1306,20 @@ class VerificationWidget(QWidget):
 # ============================================================
 
 class ImageSelector(QLabel):
-
     def __init__(self, parent=None):
         super().__init__(parent)
+
         self.press_callback = None
         self.move_callback = None
         self.release_callback = None
-        self.setMouseTracking(True)
+        self.key_callback = None
+
+        self.setMouseTracking(False)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def mousePressEvent(self, event):
+        self.setFocus()
+
         if self.press_callback:
             self.press_callback(event)
 
@@ -1328,14 +1331,12 @@ class ImageSelector(QLabel):
         if self.release_callback:
             self.release_callback(event)
 
-
+    def keyPressEvent(self, event):
+        if self.key_callback:
+            self.key_callback(event)
+        else:
+            super().keyPressEvent(event)
 class FieldMarkerWidget(QWidget):
-    """
-    Integrated replacement for mark_fields.py.
-
-    The first page of the selected PDF becomes the template. The user
-    selects each field by dragging a rectangle and pressing Enter.
-    """
 
     def __init__(self, image, field_names, on_finished, on_cancel):
         super().__init__()
@@ -1353,7 +1354,9 @@ class FieldMarkerWidget(QWidget):
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.image_label.press_callback = self.mouse_press
         self.image_label.move_callback = self.mouse_move
+        self.is_dragging = False
         self.image_label.release_callback = self.mouse_release
+        self.image_label.key_callback = self.key_press
 
         title = QLabel("Mark Form Fields")
         title.setStyleSheet("font-size: 22px; font-weight: bold;")
@@ -1454,8 +1457,13 @@ class FieldMarkerWidget(QWidget):
         return x, y
 
     def mouse_press(self, event):
+        if event.button() != Qt.MouseButton.LeftButton:
+            return
+
         point = self.widget_to_image(event.position().toPoint())
-        if point:
+
+        if point is not None:
+            self.is_dragging = True
             self.start_point = point
             self.end_point = point
             self.redraw()
@@ -1468,9 +1476,12 @@ class FieldMarkerWidget(QWidget):
                 self.redraw()
 
     def mouse_release(self, event):
+        # knownBug: mouse_release() not working on Fedora device. Cant say for sure for other devices
         point = self.widget_to_image(event.position().toPoint())
-        if point:
+        if point is not None:
             self.end_point = point
+
+        if self.start_point != None:
             self.redraw()
 
     def accept_field(self):
@@ -1513,7 +1524,12 @@ class FieldMarkerWidget(QWidget):
         super().resizeEvent(event)
         self.redraw()
 
+    def key_press(self, event):
+        if not self.is_dragging:
+            return
 
+        if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
+            print("Enter pressed while dragging")
 # ============================================================
 # OCR PROGRESS SCREEN
 # ============================================================
