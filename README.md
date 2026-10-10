@@ -58,10 +58,11 @@ The application uses a PySide6 graphical interface rather than a command-line in
 ---
 
 # DevNote:
-
-```
-Idk why this is but while installing [easyocr], the first attempt always gives an error which solves after manually installing [numpy] and [triton] first followed by reinstalling [easyocr]
-```
+  1. Idk why this is but while installing [easyocr], the first attempt always gives an error which solves after manually installing [numpy] and [triton] first followed by reinstalling [easyocr]. _this error was observed on my setup which runs on Fedora Linux So i cant tell for sure if this is will occur on other devices_
+  2. Make sure to remove the old [.db] and [.json] file after adding new fields to scan for.
+  3. This software is made for use in specific cases and the fields need to be manually altered[for now].
+  4. The accuracy of the scan *heavily depends* on the *quality of handwriting* and *scan*.
+  5. Make sure that all the fields in the pdf perfectly overlap with each other. The Software does not _auto center_ or _crop_ the image in order to save machine resources.
 
 # Installation
 
